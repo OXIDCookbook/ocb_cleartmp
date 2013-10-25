@@ -22,13 +22,10 @@
     [{assign var="oConfig" value=$oViewConf->getConfig()}]
     <ul>
       <li class="act">
-          <a href="[{$oViewConf->getSelfLink()}]&cl=navigation&amp;item=home.tpl" id="homelink" target="basefrm" class="rc"><b>[{ oxmultilang ident="NAVIGATION_HOME" }]</b></a>
+          <a href="[{$oViewConf->getSelfLink()}]&cl=navigation&amp;item=home.tpl" id="homelink" target="basefrm" class="rc"><b>Home</b></a>
       </li>
       <li class="sep">
-          <a href="[{$oConfig->getShopURL()}]" id="shopfrontlink" target="_blank" class="rc"><b>[{ oxmultilang ident="NAVIGATION_SHOPFRONT" }]</b></a>
-      </li>
-      <li class="sep">
-          <a href="[{$oViewConf->getSelfLink()}]&cl=navigation&amp;fnc=logout" id="logoutlink" target="_parent" class="rc"><b>[{ oxmultilang ident="NAVIGATION_LOGOUT" }]</b></a>
+          <a href="[{$oViewConf->getSelfLink()}]&cl=navigation&amp;fnc=logout" id="logoutlink" target="_parent" class="rc"><b>Abmelden</b></a>
       </li>
       <li class="sep">
           <form method="post" action="[{$oViewConf->getSelfLink()}]" id="cleartmp">
@@ -39,18 +36,18 @@
                   <input type="hidden" name="editlanguage" value="[{ $editlanguage }]" />
                   [{$oViewConf->getHiddenSid()}]
               </div>
-              <span class="rc">[{ oxmultilang ident="OCB_CLEARTMP_LABEL" }]</span>
+              <span class="rc">Cache leeren:</span>
               <select name="clearoption">
-                  <option value="none">[{ oxmultilang ident="OCB_CLEARTMP_PLEASECHOOSE" }]</option>
-                  <option value="smarty">[{ oxmultilang ident="OCB_CLEARTMP_SMARTY" }]</option>
-                  <option value="staticcache">[{ oxmultilang ident="OCB_CLEARTMP_STATICCACHE" }]</option>
-                  <option value="language">[{ oxmultilang ident="OCB_CLEARTMP_LANGUAGE" }]</option>
-                  <option value="database">[{ oxmultilang ident="OCB_CLEARTMP_DATABASE" }]</option>
-                  <option value="seo">[{ oxmultilang ident="OCB_CLEARTMP_SEO" }]</option>
-                  <option value="complete">[{ oxmultilang ident="OCB_CLEARTMP_COMPLETE" }]</option>
+                  <option value="none">- bitte wählen -</option>
+                  <option value="smarty">Template Cache</option>
+                  <option value="staticcache">Static Cache</option>
+                  <option value="language">Sprachecache</option>
+                  <option value="database">Datenbankcache</option>
+                  <option value="seo">SEO-Cache</option>
+                  <option value="complete">kompletter Cache</option>
               </select>
               <input type="checkbox" value="1" [{if $prodmode}]disabled="disabled"[{/if}] id="devmode" name="devmode" [{if $oView->isDevMode()}]checked="checked"[{/if}] />
-              <label for="devmode" class="rc[{if $prodmode}] disabled[{/if}]">[{ oxmultilang ident="OCB_CLEARTMP_DEVMODE" }]</label>
+              <label for="devmode" class="rc[{if $prodmode}] disabled[{/if}]">Entwickler-Modus</label>
           </form>
       </li>
     </ul>

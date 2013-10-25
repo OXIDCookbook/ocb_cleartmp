@@ -7,11 +7,11 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     {
         $sTpl = parent::render();
         
-        $this->_aViewData['prodmode'] = oxRegistry::getConfig()->isProductiveMode();
+        $this->_aViewData['prodmode'] = $this->getConfig()->isProductiveMode();
         
         if( 'header.tpl' == $sTpl )
         {
-            return 'ocb_header.tpl';
+            return '../../../modules/ocb_cleartmp/views/admin/ocb_header.tpl';
         }
         else
         {
@@ -21,13 +21,13 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     
     public function cleartmp()
     {
-        $oConf = oxRegistry::getConfig();
+        $oConf = $this->getConfig();
         $sShopId = $oConf->getShopId();
         
         $blDevMode = 0;
-        if(false != $oConf->getRequestParameter('devmode'))
+        if(false != $oConf->getParameter('devmode'))
         {
-            $blDevMode = $oConf->getRequestParameter('devmode');
+            $blDevMode = $oConf->getParameter('devmode');
         }
         $oConf->saveShopConfVar('bool', 'blDevMode', $blDevMode, $sShopId, 'module:ocb_cleartmp');
         
@@ -38,33 +38,30 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     
     public function isDevMode()
     {
-        return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
+        return $this->getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
     }
     
     public function deleteFiles()
     {
-        $oConf   = oxRegistry::getConfig();
-        $option  = $oConf->getRequestParameter('clearoption');
+        $oConf   = $this->getConfig();
+        $option  = $oConf->getParameter('clearoption');
         $sTmpDir = realpath($oConf->getShopConfVar('sCompileDir'));
         
         switch($option)
         {
             case 'smarty':
-                $aFiles = glob($sTmpDir.'/smarty/*.php');
-                break;
-            case 'staticcache':
-                $aFiles = glob($sTmpDir.'/ocb_cache/*.json');
+                $aFiles = glob($sTmpDir.'/*.tpl.php');
                 break;
             case 'language':
-                oxRegistry::get('oxUtils')->resetLanguageCache();
+            	$oUtils = oxUtils::getInstance();
+                $oUtils->resetLanguageCache();
                 break;
             case 'database':
                 $aFiles = glob($sTmpDir.'/*{_allfields_,i18n,_aLocal,allviews}*',GLOB_BRACE);
                 break;
             case 'complete':
                 $aFiles = glob($sTmpDir.'/*{.php,.txt}',GLOB_BRACE);
-                $aFiles = array_merge($aFiles, glob($sTmpDir.'/smarty/*.php'));
-                $aFiles = array_merge($aFiles, glob($sTmpDir.'/ocb_cache/*.json'));
+                $aFiles = array_merge($aFiles, glob($sTmpDir.'/*.tpl.php'));
                 break;
             case 'seo':
                 $aFiles = glob($sTmpDir.'/*seo.txt');
