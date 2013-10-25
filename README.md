@@ -7,3 +7,5 @@ Installation
 1.    Copy the module to you modules folder.
 2.    Activate module in the OXID backend.
 
+
+Note: ocb_cleartmp_lang.php not used - all german labels in template
