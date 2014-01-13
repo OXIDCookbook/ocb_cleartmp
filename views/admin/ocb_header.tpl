@@ -48,6 +48,9 @@
                   <option value="database">[{ oxmultilang ident="OCB_CLEARTMP_DATABASE" }]</option>
                   <option value="seo">[{ oxmultilang ident="OCB_CLEARTMP_SEO" }]</option>
                   <option value="complete">[{ oxmultilang ident="OCB_CLEARTMP_COMPLETE" }]</option>
+                  [{if $oView->isDevMode()}]
+                    <option value="allMods">[{ oxmultilang ident="OCB_CLEARTMP_MODULES" }]</option>
+                  [{/if}]
               </select>
               <input type="checkbox" value="1" [{if $prodmode}]disabled="disabled"[{/if}] id="devmode" name="devmode" [{if $oView->isDevMode()}]checked="checked"[{/if}] />
               <label for="devmode" class="rc[{if $prodmode}] disabled[{/if}]">[{ oxmultilang ident="OCB_CLEARTMP_DEVMODE" }]</label>

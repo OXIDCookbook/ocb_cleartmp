@@ -2,7 +2,11 @@
 
 class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
 {
-    
+    /**
+     * Change the full template as there is no block jet in the header.
+     * 
+     * @return string templatename
+     */
     public function render()
     {
         $sTpl = parent::render();
@@ -19,6 +23,12 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         }
     }
     
+    /**
+     * Method that will be called from the frontend
+     * and starts the clearing
+     * 
+     * @return null
+     */
     public function cleartmp()
     {
         $oConf = oxRegistry::getConfig();
@@ -36,11 +46,22 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         return;
     }
     
+    /**
+     * Check wether the developermode is enabled or not
+     * 
+     * @return bool
+     */
     public function isDevMode()
     {
         return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
     }
     
+    /**
+     * Method to remove the files from the cache folder 
+     * and trigger other options
+     * depending on the given option
+     * @return null
+     */
     public function deleteFiles()
     {
         $oConf   = oxRegistry::getConfig();
@@ -69,6 +90,13 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
             case 'seo':
                 $aFiles = glob($sTmpDir.'/*seo.txt');
                 break;
+                break;
+            case 'allMods':
+                $this->removeAllModuleEntriesFromDb();
+                $aFiles = glob($sTmpDir.'/*{.php,.txt}',GLOB_BRACE);
+                $aFiles = array_merge($aFiles, glob($sTmpDir.'/smarty/*.php'));
+                $aFiles = array_merge($aFiles, glob($sTmpDir.'/ocb_cache/*.json'));
+                return;
             case 'none':
             default:
                 return;
@@ -81,4 +109,23 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
             }
         }
     }
+   
+    /**
+     * Remove all module entries from the oxConfig table
+     * Will only work if the developer mode is enabled.
+     */
+    protected function removeAllModuleEntriesFromDb()
+    {
+       if(false != oxRegistry::getConfig()->getRequestParameter('devmode'))
+       {
+       
+            $sSql1 = 'DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aMod%\';'; 
+            $sSql2 = 'DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aDisabledModules%\';';
+            
+            $res1 = oxDb::getDb()->execute($sSql1);
+            $res2 = oxDb::getDb()->execute($sSql2);
+       }
+        
+    }
+    
 }

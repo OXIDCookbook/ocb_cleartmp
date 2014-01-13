@@ -13,4 +13,5 @@ $aLang = array(
     'OCB_CLEARTMP_SEO'          => 'SEO-Cache',
     'OCB_CLEARTMP_DEVMODE'      => 'Entwickler-Modus',
     'OCB_CLEARTMP_STATICCACHE'  => 'Static Cache',
+    'OCB_CLEARTMP_MODULES'      => '!!! kompletter Cache & Module',
 );
