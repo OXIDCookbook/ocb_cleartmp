@@ -1,0 +1,8 @@
+{
+    "name": "oxidcookbook/ocb_cleartmp",
+    "description": "Clear the tmp directory from the backend.",
+    "type": "oxid-module",
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
