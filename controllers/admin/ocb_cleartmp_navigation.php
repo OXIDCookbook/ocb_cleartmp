@@ -55,6 +55,26 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     {
         return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
     }
+
+	/**
+	 * Check if shop is Enterprise Edition
+	 *
+	 * @return bool
+	 */
+	public function isEEVersion()
+	{
+		return ('EE' === $this->getConfig()->getEdition());
+	}
+
+	/**
+	 * Check if picture Cache enabled
+	 *
+	 * @return bool
+	 */
+	public function isPictureCache()
+	{
+		return oxRegistry::getConfig()->getShopConfVar('sPictureClear',null,'module:ocb_cleartmp');
+	}
     
     /**
      * Method to remove the files from the cache folder 
