@@ -55,6 +55,26 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     {
         return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
     }
+
+	/**
+	 * Check if shop is Enterprise Edition
+	 *
+	 * @return bool
+	 */
+	public function isEEVersion()
+	{
+		return ('EE' === $this->getConfig()->getEdition());
+	}
+
+	/**
+	 * Check if picture Cache enabled
+	 *
+	 * @return bool
+	 */
+	public function isPictureCache()
+	{
+		return oxRegistry::getConfig()->getShopConfVar('sPictureClear',null,'module:ocb_cleartmp');
+	}
     
     /**
      * Method to remove the files from the cache folder 
@@ -86,10 +106,21 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
                 $aFiles = glob($sTmpDir.'/*{.php,.txt}',GLOB_BRACE);
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/smarty/*.php'));
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/ocb_cache/*.json'));
+				if ($this->isPictureCache()) {
+					$aFiles = array_merge($aFiles, glob($oConf->getPictureDir(false) . 'generated/*'));
+				}
+				if ($this->isEEVersion()) {
+					$this->_clearContentCache();
+				}
                 break;
             case 'seo':
                 $aFiles = glob($sTmpDir.'/*seo.txt');
                 break;
+            case 'picture':
+                $aFiles = glob($oConf->getPictureDir(false) . 'generated/*');
+                break;
+            case 'content':
+                $this->_clearContentCache();
                 break;
             case 'allMods':
                 $this->removeAllModuleEntriesFromDb();
@@ -105,11 +136,28 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         if(count($aFiles) > 0)
         {
             foreach($aFiles as $file) {
-                @unlink($file);
+	            if (is_file($file)) {
+		            @unlink($file);
+	            } else {
+		            @rmdir($file);
+	            }
             }
         }
     }
-   
+
+	/**
+	 * clears the content Cache
+	 */
+	protected function _clearContentCache()
+	{
+		/* @var $oCache \oxCache */
+		$oCache = oxNew('oxcache');
+		$oCache->reset();
+		/* @var $oRpBackend \oxCacheBackend */
+		$oRpBackend = oxRegistry::get('oxCacheBackend');
+		$oRpBackend->flush();
+	}
+
     /**
      * Remove all module entries from the oxConfig table
      * Will only work if the developer mode is enabled.
@@ -118,12 +166,8 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     {
        if(false != oxRegistry::getConfig()->getRequestParameter('devmode'))
        {
-       
-            $sSql1 = 'DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aMod%\';'; 
-            $sSql2 = 'DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aDisabledModules%\';';
-            
-            $res1 = oxDb::getDb()->execute($sSql1);
-            $res2 = oxDb::getDb()->execute($sSql2);
+            oxDb::getDb()->execute('DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aMod%\';');
+            oxDb::getDb()->execute('DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aDisabledModules%\';');
        }
         
     }
