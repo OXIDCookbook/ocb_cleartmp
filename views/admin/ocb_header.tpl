@@ -48,6 +48,10 @@
                   <option value="database">[{ oxmultilang ident="OCB_CLEARTMP_DATABASE" }]</option>
                   <option value="seo">[{ oxmultilang ident="OCB_CLEARTMP_SEO" }]</option>
                   <option value="complete">[{ oxmultilang ident="OCB_CLEARTMP_COMPLETE" }]</option>
+				  [{assign var="oConf" value=$oView->getConfig()}]
+				  [{if $oConf->getEdition() eq "EE"}]
+				  <option value="picture">[{ oxmultilang ident="OCB_CLEARTMP_CONTENT" }]</option>
+				  [{/if}]
                   [{if $oView->isDevMode()}]
                     <option value="allMods">[{ oxmultilang ident="OCB_CLEARTMP_MODULES" }]</option>
                   [{/if}]
