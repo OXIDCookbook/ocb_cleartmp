@@ -106,8 +106,12 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
                 $aFiles = glob($sTmpDir.'/*{.php,.txt}',GLOB_BRACE);
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/smarty/*.php'));
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/ocb_cache/*.json'));
-                $aFiles = array_merge($aFiles, glob($oConf->getPictureDir(false) . 'generated/*'));
-				$this->_clearContentCache();
+				if ($this->isPictureCache()) {
+					$aFiles = array_merge($aFiles, glob($oConf->getPictureDir(false) . 'generated/*'));
+				}
+				if ($this->isEEVersion()) {
+					$this->_clearContentCache();
+				}
                 break;
             case 'seo':
                 $aFiles = glob($sTmpDir.'/*seo.txt');
