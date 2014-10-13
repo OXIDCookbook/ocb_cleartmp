@@ -50,10 +50,11 @@
                   <option value="complete">[{ oxmultilang ident="OCB_CLEARTMP_COMPLETE" }]</option>
 				  [{assign var="oConf" value=$oView->getConfig()}]
 				  [{if $oConf->getEdition() eq "EE"}]
-				  <option value="picture">[{ oxmultilang ident="OCB_CLEARTMP_CONTENT" }]</option>
+				  <option value="content">[{ oxmultilang ident="OCB_CLEARTMP_CONTENT" }]</option>
 				  [{/if}]
+				  <option value="picture">[{ oxmultilang ident="OCB_CLEARTMP_PICTURE" }]</option>
                   [{if $oView->isDevMode()}]
-                    <option value="allMods">[{ oxmultilang ident="OCB_CLEARTMP_MODULES" }]</option>
+                  <option value="allMods">[{ oxmultilang ident="OCB_CLEARTMP_MODULES" }]</option>
                   [{/if}]
               </select>
               <input type="checkbox" value="1" [{if $prodmode}]disabled="disabled"[{/if}] id="devmode" name="devmode" [{if $oView->isDevMode()}]checked="checked"[{/if}] />
