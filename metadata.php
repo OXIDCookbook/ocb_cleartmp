@@ -31,5 +31,8 @@ $aModule = array(
     ),
     'templates' => array(
         'ocb_header.tpl'     => 'ocb_cleartmp/views/admin/ocb_header.tpl'
+    ),
+    'settings' => array(
+        array('group' => 'main', 'name' => 'sPictureClear', 'type' => 'bool', 'value' => 'false'),
     )
 );
