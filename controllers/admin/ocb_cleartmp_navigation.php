@@ -56,25 +56,25 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
     }
 
-	/**
-	 * Check if shop is Enterprise Edition
-	 *
-	 * @return bool
-	 */
-	public function isEEVersion()
-	{
-		return ('EE' === $this->getConfig()->getEdition());
-	}
+    /**
+     * Check if shop is Enterprise Edition
+     *
+     * @return bool
+     */
+    public function isEEVersion()
+    {
+        return ('EE' === $this->getConfig()->getEdition());
+    }
 
-	/**
-	 * Check if picture Cache enabled
-	 *
-	 * @return bool
-	 */
-	public function isPictureCache()
-	{
-		return oxRegistry::getConfig()->getShopConfVar('sPictureClear',null,'module:ocb_cleartmp');
-	}
+    /**
+     * Check if picture Cache enabled
+     *
+     * @return bool
+     */
+    public function isPictureCache()
+    {
+        return oxRegistry::getConfig()->getShopConfVar('sPictureClear',null,'module:ocb_cleartmp');
+    }
     
     /**
      * Method to remove the files from the cache folder 
@@ -106,12 +106,12 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
                 $aFiles = glob($sTmpDir.'/*{.php,.txt}',GLOB_BRACE);
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/smarty/*.php'));
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/ocb_cache/*.json'));
-				if ($this->isPictureCache()) {
-					$aFiles = array_merge($aFiles, glob($oConf->getPictureDir(false) . 'generated/*'));
-				}
-				if ($this->isEEVersion()) {
-					$this->_clearContentCache();
-				}
+                if ($this->isPictureCache()) {
+                    $aFiles = array_merge($aFiles, glob($oConf->getPictureDir(false) . 'generated/*'));
+                }
+                if ($this->isEEVersion()) {
+                    $this->_clearContentCache();
+                }
                 break;
             case 'seo':
                 $aFiles = glob($sTmpDir.'/*seo.txt');
@@ -136,27 +136,45 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         if(count($aFiles) > 0)
         {
             foreach($aFiles as $file) {
-	            if (is_file($file)) {
-		            @unlink($file);
-	            } else {
-		            @rmdir($file);
-	            }
+                if (is_file($file)) {
+                    @unlink($file);
+                } else {
+                    $this->_clearDir($file);
+                }
             }
         }
     }
 
-	/**
-	 * clears the content Cache
-	 */
-	protected function _clearContentCache()
-	{
-		/* @var $oCache \oxCache */
-		$oCache = oxNew('oxcache');
-		$oCache->reset();
-		/* @var $oRpBackend \oxCacheBackend */
-		$oRpBackend = oxRegistry::get('oxCacheBackend');
-		$oRpBackend->flush();
-	}
+    /**
+    * clears the content Cache
+    */
+    protected function _clearContentCache()
+    {
+        /* @var $oCache \oxCache */
+        $oCache = oxNew('oxcache');
+        $oCache->reset();
+        /* @var $oRpBackend \oxCacheBackend */
+        $oRpBackend = oxRegistry::get('oxCacheBackend');
+        $oRpBackend->flush();
+    }
+
+    /**
+     * @param $dir
+     *
+     * @return bool
+     */
+    public function _clearDir($dir)
+    {
+        $files = array_diff(scandir($dir), array('.','..'));
+        foreach ($files as $file) {
+            if (is_dir("$dir/$file")) {
+                $this->_clearDir("$dir/$file");
+            } else {
+                unlink("$dir/$file");
+            }
+        }
+        return rmdir($dir);
+    }
 
     /**
      * Remove all module entries from the oxConfig table
