@@ -54,6 +54,36 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     }
 
     /**
+     * Check wether the developermode is enabled or not
+     *
+     * @return bool
+     */
+    public function isDevMode()
+    {
+        return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
+    }
+
+    /**
+     * Check if shop is Enterprise Edition
+     *
+     * @return bool
+     */
+    public function isEEVersion()
+    {
+        return ('EE' === $this->getConfig()->getEdition());
+    }
+
+    /**
+     * Check if picture Cache enabled
+     *
+     * @return bool
+     */
+    public function isPictureCache()
+    {
+        return oxRegistry::getConfig()->getShopConfVar('sPictureClear', null, 'module:ocb_cleartmp');
+    }
+
+    /**
      * Method to remove the files from the cache folder
      * and trigger other options
      * depending on the given option
@@ -94,7 +124,9 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
                 $this->_clearModuleCache();
                 break;
         }
-        $this->_clearFiles($aFiles);
+        if (is_array($aFiles)) {
+            $this->_clearFiles($aFiles);
+        }
 
         return;
     }
@@ -118,31 +150,11 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         $aFiles = array_merge($aFiles, glob($sTmpDir . '/smarty/*.php'));
         $aFiles = array_merge($aFiles, glob($sTmpDir . '/ocb_cache/*.json'));
         if ($this->isPictureCache()) {
-            $aFiles = array_merge($aFiles, glob($oConf->getPictureDir(false) . 'generated/*'));
+            $aFiles = array_merge($aFiles, glob(oxRegistry::getConfig()->getPictureDir(false) . 'generated/*'));
         }
         if ($this->isEEVersion()) {
             $this->_clearContentCache();
         }
-    }
-
-    /**
-     * Check if picture Cache enabled
-     *
-     * @return bool
-     */
-    public function isPictureCache()
-    {
-        return oxRegistry::getConfig()->getShopConfVar('sPictureClear', null, 'module:ocb_cleartmp');
-    }
-
-    /**
-     * Check if shop is Enterprise Edition
-     *
-     * @return bool
-     */
-    public function isEEVersion()
-    {
-        return ('EE' === $this->getConfig()->getEdition());
     }
 
     /**
@@ -186,7 +198,7 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
      *
      * @param array $aFiles files to clear
      */
-    public function _clearFiles(array $aFiles)
+    public function _clearFiles(array $aFiles = array())
     {
         if (count($aFiles) > 0) {
             foreach ($aFiles as $file) {
@@ -222,13 +234,5 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         }
     }
 
-    /**
-     * checks if the developer mode is enabled or not
-     *
-     * @return bool
-     */
-    public function isDevMode()
-    {
-        return oxRegistry::getConfig()->getShopConfVar('blDevMode', null, 'module:ocb_cleartmp');
-    }
+
 }
