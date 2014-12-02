@@ -4,7 +4,7 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
 {
     /**
      * Change the full template as there is no block jet in the header.
-     * 
+     *
      * @return string templatename
      */
     public function render()
@@ -13,12 +13,9 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         
         $this->_aViewData['prodmode'] = oxRegistry::getConfig()->isProductiveMode();
         
-        if( 'header.tpl' == $sTpl )
-        {
+        if ('header.tpl' == $sTpl) {
             return 'ocb_header.tpl';
-        }
-        else
-        {
+        } else {
             return $sTpl;
         }
     }
@@ -26,7 +23,7 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     /**
      * Method that will be called from the frontend
      * and starts the clearing
-     * 
+     *
      * @return null
      */
     public function cleartmp()
@@ -35,8 +32,7 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         $sShopId = $oConf->getShopId();
         
         $blDevMode = 0;
-        if(false != $oConf->getRequestParameter('devmode'))
-        {
+        if (false != $oConf->getRequestParameter('devmode')) {
             $blDevMode = $oConf->getRequestParameter('devmode');
         }
         $oConf->saveShopConfVar('bool', 'blDevMode', $blDevMode, $sShopId, 'module:ocb_cleartmp');
@@ -48,12 +44,12 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     
     /**
      * Check wether the developermode is enabled or not
-     * 
+     *
      * @return bool
      */
     public function isDevMode()
     {
-        return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
+        return oxRegistry::getConfig()->getShopConfVar('blDevMode', null, 'module:ocb_cleartmp');
     }
 
     /**
@@ -73,11 +69,11 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
      */
     public function isPictureCache()
     {
-        return oxRegistry::getConfig()->getShopConfVar('sPictureClear',null,'module:ocb_cleartmp');
+        return oxRegistry::getConfig()->getShopConfVar('sPictureClear', null, 'module:ocb_cleartmp');
     }
     
     /**
-     * Method to remove the files from the cache folder 
+     * Method to remove the files from the cache folder
      * and trigger other options
      * depending on the given option
      * @return null
@@ -88,8 +84,7 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         $option  = $oConf->getRequestParameter('clearoption');
         $sTmpDir = realpath($oConf->getShopConfVar('sCompileDir'));
         
-        switch($option)
-        {
+        switch ($option) {
             case 'smarty':
                 $aFiles = glob($sTmpDir.'/smarty/*.php');
                 break;
@@ -100,10 +95,10 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
                 oxRegistry::get('oxUtils')->resetLanguageCache();
                 break;
             case 'database':
-                $aFiles = glob($sTmpDir.'/*{_allfields_,i18n,_aLocal,allviews}*',GLOB_BRACE);
+                $aFiles = glob($sTmpDir.'/*{_allfields_,i18n,_aLocal,allviews}*', GLOB_BRACE);
                 break;
             case 'complete':
-                $aFiles = glob($sTmpDir.'/*{.php,.txt}',GLOB_BRACE);
+                $aFiles = glob($sTmpDir.'/*{.php,.txt}', GLOB_BRACE);
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/smarty/*.php'));
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/ocb_cache/*.json'));
                 if ($this->isPictureCache()) {
@@ -124,7 +119,7 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
                 break;
             case 'allMods':
                 $this->removeAllModuleEntriesFromDb();
-                $aFiles = glob($sTmpDir.'/*{.php,.txt}',GLOB_BRACE);
+                $aFiles = glob($sTmpDir.'/*{.php,.txt}', GLOB_BRACE);
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/smarty/*.php'));
                 $aFiles = array_merge($aFiles, glob($sTmpDir.'/ocb_cache/*.json'));
                 return;
@@ -133,9 +128,8 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
                 return;
         }
         
-        if(count($aFiles) > 0)
-        {
-            foreach($aFiles as $file) {
+        if (count($aFiles) > 0) {
+            foreach ($aFiles as $file) {
                 if (is_file($file)) {
                     @unlink($file);
                 } else {
@@ -165,7 +159,7 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
      */
     public function _clearDir($dir)
     {
-        $files = array_diff(scandir($dir), array('.','..'));
+        $files = array_diff(scandir($dir), array('.', '..'));
         foreach ($files as $file) {
             if (is_dir("$dir/$file")) {
                 $this->_clearDir("$dir/$file");
@@ -182,12 +176,9 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
      */
     protected function removeAllModuleEntriesFromDb()
     {
-       if(false != oxRegistry::getConfig()->getRequestParameter('devmode'))
-       {
+        if (false != oxRegistry::getConfig()->getRequestParameter('devmode')) {
             oxDb::getDb()->execute('DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aMod%\';');
             oxDb::getDb()->execute('DELETE FROM `oxconfig` WHERE `OXVARNAME` LIKE \'%aDisabledModules%\';');
-       }
-        
+        }
     }
-    
 }
