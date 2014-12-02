@@ -54,6 +54,36 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
     }
 
     /**
+     * Check wether the developermode is enabled or not
+     *
+     * @return bool
+     */
+    public function isDevMode()
+    {
+        return oxRegistry::getConfig()->getShopConfVar('blDevMode',null,'module:ocb_cleartmp');
+    }
+
+    /**
+     * Check if shop is Enterprise Edition
+     *
+     * @return bool
+     */
+    public function isEEVersion()
+    {
+        return ('EE' === $this->getConfig()->getEdition());
+    }
+
+    /**
+     * Check if picture Cache enabled
+     *
+     * @return bool
+     */
+    public function isPictureCache()
+    {
+        return oxRegistry::getConfig()->getShopConfVar('sPictureClear', null, 'module:ocb_cleartmp');
+    }
+
+    /**
      * Method to remove the files from the cache folder
      * and trigger other options
      * depending on the given option
@@ -123,26 +153,6 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         if ($this->isEEVersion()) {
             $this->_clearContentCache();
         }
-    }
-
-    /**
-     * Check if picture Cache enabled
-     *
-     * @return bool
-     */
-    public function isPictureCache()
-    {
-        return oxRegistry::getConfig()->getShopConfVar('sPictureClear', null, 'module:ocb_cleartmp');
-    }
-
-    /**
-     * Check if shop is Enterprise Edition
-     *
-     * @return bool
-     */
-    public function isEEVersion()
-    {
-        return ('EE' === $this->getConfig()->getEdition());
     }
 
     /**
@@ -222,13 +232,5 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
         }
     }
 
-    /**
-     * checks if the developer mode is enabled or not
-     *
-     * @return bool
-     */
-    public function isDevMode()
-    {
-        return oxRegistry::getConfig()->getShopConfVar('blDevMode', null, 'module:ocb_cleartmp');
-    }
+
 }
