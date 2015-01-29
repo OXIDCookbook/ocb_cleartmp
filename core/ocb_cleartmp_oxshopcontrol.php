@@ -25,4 +25,14 @@ class ocb_cleartmp_oxshopcontrol extends ocb_cleartmp_oxshopcontrol_parent
         }
         parent::_runOnce();
     }
+
+    /**
+     * Checks if shop is in development mode
+     *
+     * @return bool
+     */
+    protected function _isDebugMode()
+    {
+        return oxRegistry::getConfig()->getShopConfVar('blDevMode', null, 'module:ocb_cleartmp');
+    }
 }
