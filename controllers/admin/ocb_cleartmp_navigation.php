@@ -159,15 +159,18 @@ class ocb_cleartmp_navigation extends ocb_cleartmp_navigation_parent
      */
     public function _clearDir($dir)
     {
-        $files = array_diff(scandir($dir), array('.', '..'));
-        foreach ($files as $file) {
-            if (is_dir("$dir/$file")) {
-                $this->_clearDir("$dir/$file");
-            } else {
-                unlink("$dir/$file");
+      	if (is_dir($dir)) {
+            $files = array_diff(scandir($dir), array('.', '..'));
+            foreach ($files as $file) {
+                if (is_dir("$dir/$file")) {
+                    $this->_clearDir("$dir/$file");
+                } else {
+                    unlink("$dir/$file");
+                }
             }
+            return rmdir($dir);
         }
-        return rmdir($dir);
+        return false;
     }
 
     /**
