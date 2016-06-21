@@ -12,7 +12,7 @@
  * Metadata version
  */
 $sMetadataVersion = '1.1';
- 
+
 /**
  * Module information
  */
@@ -34,5 +34,6 @@ $aModule = array(
     ),
     'settings' => array(
         array('group' => 'main', 'name' => 'sPictureClear', 'type' => 'bool', 'value' => 'false'),
+        array('group' => 'main', 'name' => 'aRemoteHosts', 'type' => 'arr'),
     )
 );
