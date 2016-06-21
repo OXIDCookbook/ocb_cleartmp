@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html id="top">
 <head>
     <title>[{ oxmultilang ident="NAVIGATION_TITLE" }]</title>
@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="[{$oViewConf->getResourceUrl()}]colors.css">
     <link rel="stylesheet" href="[{$oViewConf->getModuleUrl('ocb_cleartmp','out/admin/css/ocb_cleartmp.css')}]">
     <script type="text/javascript" src="[{$oViewConf->getResourceUrl()}]js/libs/jquery.min.js"></script>
-    <script>
+    <script type="text/javascript">
     $(document).ready(function() {
         $('select').change(function(){
             $('#cleartmp').submit();
@@ -39,8 +39,8 @@
                   <input type="hidden" name="editlanguage" value="[{ $editlanguage }]" />
                   [{$oViewConf->getHiddenSid()}]
               </div>
-              <span class="rc">[{ oxmultilang ident="OCB_CLEARTMP_LABEL" }]</span>
-              <select name="clearoption">
+              <span class="rc"><label for="clearOption">[{ oxmultilang ident="OCB_CLEARTMP_LABEL" }]</label></span>
+              <select name="clearoption" id="clearOption">
                   <option value="none">[{ oxmultilang ident="OCB_CLEARTMP_PLEASECHOOSE" }]</option>
                   <option value="smarty">[{ oxmultilang ident="OCB_CLEARTMP_SMARTY" }]</option>
                   <option value="staticcache">[{ oxmultilang ident="OCB_CLEARTMP_STATICCACHE" }]</option>
